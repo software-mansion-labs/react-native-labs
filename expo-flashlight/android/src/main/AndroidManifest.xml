@@ -3,12 +3,6 @@
 
     <application>
         <activity
-            android:name=".FullscreenActivity2"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="false"
-            android:label="@string/title_activity_fullscreen2"
-            android:theme="@style/Theme.Expolockscreenexample.Fullscreen" />
-        <activity
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"

@@ -1,11 +1,8 @@
 <resources>
-
-    <style name="Widget.Theme.Expolockscreenexample.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
-    </style>
-
-    <style name="Widget.Theme.Expolockscreenexample.ButtonBar.Fullscreen" parent="">
-        <item name="android:background">@color/black_overlay</item>
-        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    <!-- other styles -->
+    <style name="NumericButton" parent="android:Widget.Button">
+        <item name="android:background">@drawable/ripple_effect</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">24sp</item>
     </style>
 </resources>

@@ -6,4 +6,6 @@
     android:background="?attr/fullscreenBackgroundColor"
     android:theme="@style/ThemeOverlay.Expolockscreenexample.FullscreenContainer"
     tools:context=".FullscreenActivity">
+
+    <include layout="@layout/numeric_keypad_dialog"/>
 </FrameLayout>

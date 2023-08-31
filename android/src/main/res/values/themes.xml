@@ -4,14 +4,13 @@
 
     <style name="Theme.Expolockscreenexample.Fullscreen" parent="Theme.Expolockscreenexample">
         <item name="android:actionBarStyle">
-            @style/Widget.Theme.Expolockscreenexample.ActionBar.Fullscreen
         </item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@null</item>
     </style>
 
     <style name="ThemeOverlay.Expolockscreenexample.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
-        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+        <item name="fullscreenBackgroundColor">#ffffff</item>
+        <item name="textColor">#000000</item>
     </style>
 </resources>
