@@ -1,0 +1,42 @@
+{
+  "name": "expo-flashlight",
+  "version": "0.1.0",
+  "description": "Turn flashlight on and off",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "open -a \"Xcode\" example/ios",
+    "open:android": "open -a \"Android Studio\" example/android"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-flashlight",
+    "ExpoFlashlight"
+  ],
+  "repository": "https://github.com/Skalakid/expo-flashlight",
+  "bugs": {
+    "url": "https://github.com/Skalakid/expo-flashlight/issues"
+  },
+  "author": "Michał Skałka <michal.skalka@swmansion.com> (https://github.com/Skalakid)",
+  "license": "MIT",
+  "homepage": "https://github.com/Skalakid/expo-flashlight#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/react": "^18.0.25",
+    "expo-module-scripts": "^3.0.11",
+    "expo-modules-core": "^1.5.7"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  }
+}
