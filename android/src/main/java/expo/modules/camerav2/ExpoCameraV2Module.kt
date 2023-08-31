@@ -43,16 +43,13 @@ class ExpoCameraV2Module : Module() {
     View(ExpoCameraV2Preview::class) {
       // Defines a setter for the `name` prop.
       AsyncFunction("setCameraAsync") {view: ExpoCameraV2Preview, camera: Camera ->
-        println("hell yeah")
         camera.attachPreview(view)
       }
     }
 
     Class(Camera::class) {
       Constructor {
-        val camera = Camera(context = appContext.currentActivity!!, appContext = appContext)
-
-        return@Constructor camera
+        return@Constructor Camera(context = appContext.currentActivity!!, appContext = appContext)
       }
     }
   }

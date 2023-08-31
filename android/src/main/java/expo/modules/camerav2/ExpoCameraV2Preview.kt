@@ -7,7 +7,7 @@ import expo.modules.kotlin.AppContext
 import expo.modules.kotlin.views.ExpoView
 
 class ExpoCameraV2Preview(context: Context, appContext: AppContext) : ExpoView(context, appContext) {
-  val cameraXPreview = PreviewView(context)
+  public val cameraXPreview = PreviewView(context)
 
   init {
     addView(cameraXPreview, ViewGroup.LayoutParams(
