@@ -1,20 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
-
-import * as ExpoCameraV2 from 'expo-camera-v2';
+import { useEffect } from 'react';
+import { CameraScreen } from './CameraScreen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>{ExpoCameraV2.hello()}</Text>
-    </View>
+    <SafeAreaProvider>
+      <CameraScreen />
+      <StatusBar translucent style="light" />
+    </SafeAreaProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
