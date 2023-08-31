@@ -4,6 +4,9 @@ import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 
 class ExpoCameraV2Module : Module() {
+  // workaround hopefully
+  private val camerasRegistry = mapOf<Int, Camera>()
+
   // Each module class must implement the definition function. The definition consists of components
   // that describes the module's functionality and behavior.
   // See https://docs.expo.dev/modules/module-api for more details about available components.
@@ -37,10 +40,19 @@ class ExpoCameraV2Module : Module() {
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of
     // the view definition: Prop, Events.
-    View(ExpoCameraV2View::class) {
+    View(ExpoCameraV2Preview::class) {
       // Defines a setter for the `name` prop.
-      Prop("name") { view: ExpoCameraV2View, prop: String ->
-        println(prop)
+      AsyncFunction("setCameraAsync") {view: ExpoCameraV2Preview, camera: Camera ->
+        println("hell yeah")
+        camera.attachPreview(view)
+      }
+    }
+
+    Class(Camera::class) {
+      Constructor {
+        val camera = Camera(context = appContext.currentActivity!!, appContext = appContext)
+
+        return@Constructor camera
       }
     }
   }

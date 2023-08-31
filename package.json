@@ -30,9 +30,10 @@
   "homepage": "https://github.com/bbarthec/expo-camera-v2#readme",
   "dependencies": {},
   "devDependencies": {
+    "react-native": "0.72.4",
     "@types/react": "^18.0.25",
     "expo-module-scripts": "^3.0.11",
-    "expo-modules-core": "^1.5.7"
+    "expo-modules-core": "^1.5.11"
   },
   "peerDependencies": {
     "expo": "*",

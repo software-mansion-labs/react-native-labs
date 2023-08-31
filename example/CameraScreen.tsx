@@ -1,14 +1,30 @@
-import { Entypo, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useCameraV2, CameraV2Preview } from "expo-camera-v2";
+import { useCallback } from "react";
+import { CameraV2PreviewRef } from "expo-camera-v2/ExpoCameraV2NativeView";
 
 export function CameraScreen() {
   const { top } = useSafeAreaInsets();
 
+  const camera = useCameraV2();
+
+  const previewRef = useCallback<
+    (current: CameraV2PreviewRef) => Promise<void>
+  >(
+    async (node) => {
+      if (node !== null) {
+        await node.setCameraAsync(camera);
+      }
+    },
+    [camera]
+  );
+
   return (
     <View style={[styles.container, { paddingTop: top }]}>
       <ControlButtons />
-      <CameraPreview />
+      <CameraV2Preview nativeRef={previewRef} style={{ flex: 1 }} />
       <ModeSelect />
       <ShutterButton />
     </View>
@@ -35,10 +51,6 @@ function ModeSelect() {
       ))}
     </View>
   );
-}
-
-function CameraPreview() {
-  return <View style={styles.cameraPreview} />;
 }
 
 const CONTROL_BUTTONS = [
