@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "react-native-widget-extension-local": ["../src/index"],
+    },
+    "strict": true
+  },
+  "extends": "expo/tsconfig.base",
+}
