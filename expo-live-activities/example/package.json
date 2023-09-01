@@ -1,0 +1,24 @@
+{
+  "name": "widget-example",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx expo start --dev-client --clear",
+    "ios": "npx expo run:ios",
+    "prebuild": "EXPO_NO_GIT_STATUS=true npx expo prebuild -p ios --clean",
+    "android": "expo run:android"
+  },
+  "dependencies": {
+    "expo": "~48.0.18",
+    "expo-dev-client": "~2.2.1",
+    "expo-splash-screen": "~0.18.2",
+    "expo-status-bar": "~1.4.4",
+    "react": "18.2.0",
+    "react-native": "0.71.8",
+    "react-native-widget-extension": "^0.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.11",
+    "babel-plugin-module-resolver": "^5.0.0"
+  },
+  "private": true
+}
