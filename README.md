@@ -12,6 +12,6 @@ Directory with experimental React Native modules and features.
 | [expo-live-activities](./expo-live-activities) | Fork of [react-native-widget-extensions](https://github.com/bndkt/react-native-widget-extension) allowing multiple activities in one time in one app and containing more generic update and end TS functions | <video src="https://github.com/software-mansion-labs/react-native-labs/assets/109533125/8cbec87e-1219-4637-b2e7-48c93fd8804f" height="480"/> | 
 | [expo-flashlight](./expo-flashlight) | Add basic functions that allow users to control flashlight on their devices | <video src="https://github.com/software-mansion-labs/react-native-labs/assets/39538890/33366084-2b42-4b8b-8195-4818f3a9c16c" height="480"/> | 
 | [expo-super-torch](./expo-super-torch) | Multiplatform* Torch API you always wanted... (*only android atm) [🧨](https://github.com/tjzel/expo-super-torch) | 
-| [react-native-multipeer](./react-native-multipeer) | Multipeer Conectivity API (*only ios) |  
+| [react-native-multipeer](./react-native-multipeer) | Multipeer Conectivity API (*only ios) | https://drive.google.com/file/d/1h5NWY6IlUm_4QucM-IFt2ZWx9UkNl0jt/view?usp=sharing |  
 | |
 
