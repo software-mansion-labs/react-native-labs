@@ -8,15 +8,23 @@ There's only Android implementation at this moment as this was the core idea of 
 
 Navigate to [`example`](./example) directory and try it out.
 
-# API documentation
+## API
 
-- [Documentation for the main branch](https://github.com/expo/expo/blob/main/docs/pages/versions/unversioned/sdk/camera-v2.md)
-- [Documentation for the latest stable release](https://docs.expo.dev/versions/latest/sdk/camera-v2/)
+At this very moment only 2 key things are somehow done:
+- [x] preview connection with camera sensor
+- [x] taking picture
 
-### Configure for iOS
+THe novelty technical aspects for this library:
+- [x] decoupling `Preview` component (RN Native View exposed via Expo Modules API) and `camera` object (SharedObject from Expo Modules API) that controls the camera behaviour and actions (e.g. taking picture action)
+- [x] wrapping Android CameraX API in React Native - successor for legacy Camera1 API used in original `expo-camera` library 
 
-Run `npx pod-install` after installing the npm package.
 
+### Installation & further development
 
-### Configure for Android
+1. Learn about [Expo Modules API from App.js workshops](https://hackmd.io/gYH9xz-oR2ai0Yih8if50w) or [Expo Modules API docs](https://docs.expo.dev/modules/module-api/)
+1. Install all dependencies:
+  > `yarn` in root directory
+  > `yarn` in `exmaple` dirctory
+  > `pod install` in `ios` directory
+1. Start `exmaple` project on Android and have fun
 
