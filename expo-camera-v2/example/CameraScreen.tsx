@@ -1,16 +1,19 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useCameraV2, CameraV2Preview } from "expo-camera-v2";
-import * as Camera from "expo-camera";
+import {
+  useCameraV2,
+  CameraV2Preview,
+  CameraV2PreviewRef,
+  requestCameraPermissionsAsync,
+} from "expo-camera-v2";
 import { useCallback, useEffect, useState } from "react";
-import { CameraV2PreviewRef } from "expo-camera-v2/ExpoCameraV2NativeView";
 
 function useCameraPermissions() {
   const [result, setResult] = useState(false);
   useEffect(() => {
     (async () => {
-      const result = await Camera.requestCameraPermissionsAsync();
+      const result = await requestCameraPermissionsAsync();
       setResult(result.granted);
     })();
   }, []);
@@ -36,10 +39,19 @@ export function CameraScreen() {
     [camera]
   );
 
+  const takePhoto = useCallback(async () => {
+    const result = await camera.takePictureAsync();
+    Alert.alert(result);
+  }, []);
+
   if (!permissionGranted) {
-    console.warn("Camera permission not granted");
     return (
-      <View style={[styles.container, { paddingTop: top }]}>
+      <View
+        style={[
+          styles.container,
+          { paddingTop: top, justifyContent: "center", alignContent: "center" },
+        ]}
+      >
         <Text style={{ color: "white" }}>Camera permissions not granted</Text>
       </View>
     );
@@ -50,20 +62,20 @@ export function CameraScreen() {
       <ControlButtons />
       <CameraV2Preview nativeRef={previewRef} style={{ flex: 1 }} />
       <ModeSelect />
-      <ShutterButton />
+      <ShutterButton onPress={takePhoto} />
     </View>
   );
 }
 
-function ShutterButton() {
+function ShutterButton({ onPress }: { onPress: () => void }) {
   return (
     <View style={styles.shutterButtonContainer}>
-      <TouchableOpacity style={styles.shutterButton} />
+      <TouchableOpacity style={styles.shutterButton} onPress={onPress} />
     </View>
   );
 }
 
-const MODE_BUTTONS = [{ title: "PHOTO" }, { title: "VIDEO" }] as const;
+const MODE_BUTTONS = [/*{ title: "PHOTO" }, { title: "VIDEO" }*/] as const;
 
 function ModeSelect() {
   return (
@@ -78,12 +90,12 @@ function ModeSelect() {
 }
 
 const CONTROL_BUTTONS = [
-  { name: "cog" },
-  { name: "bolt" },
-  { name: "clock-o" },
-  { name: "square-o" },
-  { name: "square" },
-  { name: "magic" },
+  // { name: "cog" },
+  // { name: "bolt" },
+  // { name: "clock-o" },
+  // { name: "square-o" },
+  // { name: "square" },
+  // { name: "magic" },
 ] as const;
 
 function ControlButtons() {
