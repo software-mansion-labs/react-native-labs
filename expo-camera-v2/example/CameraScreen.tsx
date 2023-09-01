@@ -1,16 +1,19 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useCameraV2, CameraV2Preview } from "expo-camera-v2";
-import * as Camera from "expo-camera";
+import {
+  useCameraV2,
+  CameraV2Preview,
+  CameraV2PreviewRef,
+  requestCameraPermissionsAsync,
+} from "expo-camera-v2";
 import { useCallback, useEffect, useState } from "react";
-import { CameraV2PreviewRef } from "expo-camera-v2/ExpoCameraV2NativeView";
 
 function useCameraPermissions() {
   const [result, setResult] = useState(false);
   useEffect(() => {
     (async () => {
-      const result = await Camera.requestCameraPermissionsAsync();
+      const result = await requestCameraPermissionsAsync();
       setResult(result.granted);
     })();
   }, []);
