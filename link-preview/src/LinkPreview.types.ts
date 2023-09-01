@@ -3,5 +3,8 @@ export type ChangeEventPayload = {
 };
 
 export type LinkPreviewViewProps = {
-  name: string;
+  url: string;
+  onLoad: () => void;
+  onStartLoading: () => void;
+  style: any;
 };

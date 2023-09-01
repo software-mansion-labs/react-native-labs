@@ -5,7 +5,7 @@ import { LinkPreviewViewProps } from './LinkPreview.types';
 export default function LinkPreviewView(props: LinkPreviewViewProps) {
   return (
     <div>
-      <span>{props.name}</span>
+      <span>{props.url}</span>
     </div>
   );
 }
