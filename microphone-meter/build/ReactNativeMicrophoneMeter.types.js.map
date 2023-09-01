@@ -1,0 +1,1 @@
+{"version":3,"file":"ReactNativeMicrophoneMeter.types.js","sourceRoot":"","sources":["../src/ReactNativeMicrophoneMeter.types.ts"],"names":[],"mappings":"","sourcesContent":["export type ChangeEventPayload = {\n  value: string;\n};\n\nexport type ReactNativeMicrophoneMeterViewProps = {\n  name: string;\n};\n"]}
