@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["LinkPreviewModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.linkpreview.LinkPreviewModule"]
+  }
+}
