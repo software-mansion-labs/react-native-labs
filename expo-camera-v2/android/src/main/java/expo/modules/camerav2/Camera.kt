@@ -8,6 +8,7 @@ import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.CameraState
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.concurrent.futures.await
@@ -21,13 +22,14 @@ import kotlinx.coroutines.launch
 internal class Camera(private val context: Context, private val appContext: AppContext) : SharedObject(), LifecycleOwner {
 
   private var preview: Preview? = null
+  private var imageCapture: ImageCapture? = null
   private var camera: androidx.camera.core.Camera? = null
   private var cameraProvider: ProcessCameraProvider? = null
 
 
   private val TAG = "ExpoCamera"
-  val screenAspectRatio = AspectRatio.RATIO_4_3
-  val rotation = Surface.ROTATION_0
+  private val screenAspectRatio = AspectRatio.RATIO_4_3
+  private val rotation = Surface.ROTATION_0
 
   private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
   private val lifecycleRegistry = LifecycleRegistry(this)
@@ -37,85 +39,14 @@ internal class Camera(private val context: Context, private val appContext: AppC
       lifecycleRegistry.currentState = Lifecycle.State.STARTED
       setUpCamera()
     }
-
-//    reactContext.addLifecycleEventListener(object : LifecycleEventListener {
-//      override fun onHostResume() {
-//        hostLifecycleState = Lifecycle.State.RESUMED
-//        updateLifecycleState()
-//        // workaround for https://issuetracker.google.com/issues/147354615, preview must be bound on resume
-//        update(propsThatRequireSessionReconfiguration)
-//      }
-//      override fun onHostPause() {
-//        hostLifecycleState = Lifecycle.State.CREATED
-//        updateLifecycleState()
-//      }
-//      override fun onHostDestroy() {
-//        hostLifecycleState = Lifecycle.State.DESTROYED
-//        updateLifecycleState()
-//        cameraExecutor.shutdown()
-//        takePhotoExecutor.shutdown()
-//        recordVideoExecutor.shutdown()
-//        reactContext.removeLifecycleEventListener(this)
-//      }
-//    })
   }
 
   private suspend fun setUpCamera() {
     cameraProvider = ProcessCameraProvider.getInstance(context).await()
   }
 
-  private fun bindCameraUseCases() {
-
-    // CameraProvider
-    val cameraProvider = cameraProvider
-      ?: throw IllegalStateException("Camera initialization failed.")
-
-    // CameraSelector
-    val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
-
-    // Preview
-    preview = Preview.Builder()
-      // We request aspect ratio but no resolution
-      .setTargetAspectRatio(screenAspectRatio)
-      // Set initial target rotation
-      .setTargetRotation(rotation)
-      .build()
-
-//    // ImageCapture
-//    imageCapture = ImageCapture.Builder()
-//      .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-//      // We request aspect ratio but no resolution to match preview config, but letting
-//      // CameraX optimize for whatever specific resolution best fits our use cases
-//      .setTargetAspectRatio(screenAspectRatio)
-//      // Set initial target rotation, we will have to call this again if rotation changes
-//      // during the lifecycle of this use case
-//      .setTargetRotation(rotation)
-//      .build()
-
-    // Must unbind the use-cases before rebinding them
-    cameraProvider.unbindAll()
-
-    if (camera != null) {
-      // Must remove observers from the previous camera instance
-      removeCameraStateObservers(camera!!.cameraInfo)
-    }
-
-    try {
-      // A variable number of use-cases can be passed here -
-      // camera provides access to CameraControl & CameraInfo
-//      camera = cameraProvider.bindToLifecycle(
-//        appContext.currentActivity, cameraSelector, preview)
-//
-//      // Attach the viewfinder's surface provider to preview use case
-//      preview?.setSurfaceProvider(fragmentCameraBinding.viewFinder.surfaceProvider)
-//      observeCameraState(camera?.cameraInfo!!)
-    } catch (exc: Exception) {
-      Log.e(TAG, "Use case binding failed", exc)
-    }
-  }
-
   private fun removeCameraStateObservers(cameraInfo: CameraInfo) {
-//    cameraInfo.cameraState.removeObservers(viewLifecycleOwner)
+    cameraInfo.cameraState.removeObservers(this)
   }
 
   private fun observeCameraState(cameraInfo: CameraInfo) {
@@ -216,7 +147,6 @@ internal class Camera(private val context: Context, private val appContext: AppC
   private fun bindCameraPreviewUseCase(view: ExpoCameraV2Preview) {
     val cameraProvider = cameraProvider ?: throw IllegalStateException("Camera initialization failed.")
     val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
-    cameraProvider.unbindAll()
 
     // Preview
     preview = Preview.Builder()
@@ -226,11 +156,33 @@ internal class Camera(private val context: Context, private val appContext: AppC
       .setTargetRotation(rotation)
       .build()
 
-    try {
-      camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
+    imageCapture = ImageCapture.Builder()
+      .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+      // We request aspect ratio but no resolution to match preview config, but letting
+      // CameraX optimize for whatever specific resolution best fits our use cases
+      .setTargetAspectRatio(screenAspectRatio)
+      // Set initial target rotation, we will have to call this again if rotation changes
+      // during the lifecycle of this use case
+      .setTargetRotation(rotation)
+      .build()
 
+    // Must unbind the use-cases before rebinding them
+    cameraProvider.unbindAll()
+
+    if (camera != null) {
+      // Must remove observers from the previous camera instance
+      removeCameraStateObservers(camera!!.cameraInfo)
+    }
+
+    try {
       // Attach the viewfinder's surface provider to preview use case
       preview?.setSurfaceProvider(view.cameraXPreview.surfaceProvider)
+
+      // A variable number of use-cases can be passed here -
+      // camera provides access to CameraControl & CameraInfo
+      camera = cameraProvider.bindToLifecycle(
+        this, cameraSelector, preview, imageCapture)
+
       observeCameraState(camera?.cameraInfo!!)
     } catch (exc: Exception) {
       Log.e(TAG, "Use case binding failed", exc)
@@ -239,23 +191,5 @@ internal class Camera(private val context: Context, private val appContext: AppC
 
   override val lifecycle: Lifecycle
     get() = lifecycleRegistry
-
-  private var hostLifecycleState = Lifecycle.State.INITIALIZED
-
-//  private fun updateLifecycleState() {
-//    val lifecycleBefore = lifecycleRegistry.currentState
-//    if (hostLifecycleState == Lifecycle.State.RESUMED) {
-//      // Host Lifecycle (Activity) is currently active (RESUMED), so we narrow it down to the view's lifecycle
-//      if (isActive && isAttachedToWindow) {
-//        lifecycleRegistry.currentState = Lifecycle.State.RESUMED
-//      } else {
-//        lifecycleRegistry.currentState = Lifecycle.State.CREATED
-//      }
-//    } else {
-//      // Host Lifecycle (Activity) is currently inactive (STARTED or DESTROYED), so that overrules our view's lifecycle
-//      lifecycleRegistry.currentState = hostLifecycleState
-//    }
-//    Log.d(TAG, "Lifecycle went from ${lifecycleBefore.name} -> ${lifecycleRegistry.currentState.name} (isActive: $isActive | isAttachedToWindow: $isAttachedToWindow)")
-//  }
 
 }

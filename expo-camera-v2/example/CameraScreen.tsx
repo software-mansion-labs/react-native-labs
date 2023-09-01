@@ -40,9 +40,13 @@ export function CameraScreen() {
   );
 
   if (!permissionGranted) {
-    console.warn("Camera permission not granted");
     return (
-      <View style={[styles.container, { paddingTop: top }]}>
+      <View
+        style={[
+          styles.container,
+          { paddingTop: top, justifyContent: "center", alignContent: "center" },
+        ]}
+      >
         <Text style={{ color: "white" }}>Camera permissions not granted</Text>
       </View>
     );
