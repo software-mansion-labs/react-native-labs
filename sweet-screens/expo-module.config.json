@@ -1,0 +1,11 @@
+{
+  "platforms": [
+    "ios"
+  ],
+  "ios": {
+    "modules": [
+      "ScreenStackModule",
+      "ScreenModule"
+    ]
+  }
+}
