@@ -38,6 +38,10 @@ class ExpoCameraV2Module : Module() {
       Constructor {
         return@Constructor Camera(context = appContext.currentActivity!!, appContext = appContext)
       }
+
+      AsyncFunction("takePictureAsync") { camera: Camera, promise: Promise ->
+        camera.takePicture(promise)
+      }
     }
   }
 

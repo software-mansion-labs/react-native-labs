@@ -7,5 +7,5 @@ export type CameraV2PreviewProps = {
 } & ViewProps;
 
 export type Camera = {
-  takePicture(): void;
+  takePictureAsync(): Promise<string>;
 };

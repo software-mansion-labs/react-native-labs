@@ -1,6 +1,14 @@
 package expo.modules.camerav2
 
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.hardware.Camera
+import android.media.effect.Effect
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.view.Surface
 import android.widget.Toast
@@ -9,15 +17,22 @@ import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.CameraState
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.R
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.concurrent.futures.await
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import expo.modules.kotlin.AppContext
+import expo.modules.kotlin.Promise
 import expo.modules.kotlin.sharedobjects.SharedObject
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 internal class Camera(private val context: Context, private val appContext: AppContext) : SharedObject(), LifecycleOwner {
 
@@ -26,6 +41,7 @@ internal class Camera(private val context: Context, private val appContext: AppC
   private var camera: androidx.camera.core.Camera? = null
   private var cameraProvider: ProcessCameraProvider? = null
 
+  private var cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
 
   private val TAG = "ExpoCamera"
   private val screenAspectRatio = AspectRatio.RATIO_4_3
@@ -191,5 +207,60 @@ internal class Camera(private val context: Context, private val appContext: AppC
 
   override val lifecycle: Lifecycle
     get() = lifecycleRegistry
+
+  fun takePicture(promise: Promise) {
+    imageCapture?.let { imageCapture ->
+
+      // Create time stamped name and MediaStore entry.
+      val name = SimpleDateFormat(FILENAME, Locale.US)
+        .format(System.currentTimeMillis())
+      val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+        put(MediaStore.MediaColumns.MIME_TYPE, PHOTO_TYPE)
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+          put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/expo-camera")
+        }
+      }
+
+      // Create output options object which contains file + metadata
+      val outputOptions = ImageCapture.OutputFileOptions
+        .Builder(context.contentResolver,
+          MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+          contentValues)
+        .build()
+
+      // Setup image capture listener which is triggered after photo has been taken
+      imageCapture.takePicture(
+        outputOptions, cameraExecutor, object : ImageCapture.OnImageSavedCallback {
+        override fun onError(exc: ImageCaptureException) {
+          promise.reject(TAG, "Photo capture failed", exc)
+          Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+        }
+
+        override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+
+          val savedUri = output.savedUri
+          Log.d(TAG, "Photo capture succeeded: $savedUri")
+
+          promise.resolve(output.savedUri)
+
+          // Implicit broadcasts will be ignored for devices running API level >= 24
+          // so if you only target API level 24+ you can remove this statement
+          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            // Suppress deprecated Camera usage needed for API level 23 and below
+            @Suppress("DEPRECATION")
+            appContext.currentActivity?.sendBroadcast(
+              Intent(Camera.ACTION_NEW_PICTURE, savedUri)
+            )
+          }
+        }
+      })
+    }
+  }
+
+  companion object {
+    private const val FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS"
+    private const val PHOTO_TYPE = "image/jpeg"
+  }
 
 }

@@ -1,5 +1,5 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   useCameraV2,
@@ -39,6 +39,11 @@ export function CameraScreen() {
     [camera]
   );
 
+  const takePhoto = useCallback(async () => {
+    const result = await camera.takePictureAsync();
+    Alert.alert(result);
+  }, []);
+
   if (!permissionGranted) {
     return (
       <View
@@ -57,15 +62,15 @@ export function CameraScreen() {
       <ControlButtons />
       <CameraV2Preview nativeRef={previewRef} style={{ flex: 1 }} />
       <ModeSelect />
-      <ShutterButton />
+      <ShutterButton onPress={takePhoto} />
     </View>
   );
 }
 
-function ShutterButton() {
+function ShutterButton({ onPress }: { onPress: () => void }) {
   return (
     <View style={styles.shutterButtonContainer}>
-      <TouchableOpacity style={styles.shutterButton} />
+      <TouchableOpacity style={styles.shutterButton} onPress={onPress} />
     </View>
   );
 }
