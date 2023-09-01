@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["ExpoFlashlightModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.flashlight.ExpoFlashlightModule"]
+  }
+}
