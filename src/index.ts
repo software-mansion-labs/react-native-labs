@@ -13,9 +13,8 @@ import {
   ExpoLockScreenViewProps,
 } from "./ExpoLockScreen.types";
 
-export const show = () => {
-  ExpoLockScreenModule.show();
-  console.log("show");
+export const show = (title?: string, message?: string) => {
+  ExpoLockScreenModule.show(title, message);
 };
 
 export { ExpoLockScreenView, ExpoLockScreenViewProps, ChangeEventPayload };

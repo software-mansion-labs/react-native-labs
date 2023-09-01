@@ -1,28 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/fullscreenBackgroundColor"
     android:theme="@style/ThemeOverlay.Expolockscreenexample.FullscreenContainer"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".FullscreenActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp">
+        android:gravity="center"
+        android:layout_marginTop="72dp">
+
+        <TextView
+            android:id="@+id/lockTitle"
+            android:text="@string/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text"
+            android:textSize="28sp"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/lockMessage"
+            android:text="@string/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="12dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/dotHolder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="100dp"
+            android:gravity="center"
             android:orientation="horizontal" />
 
-        <include layout="@layout/numeric_keypad_dialog"/>
+        <TextView
+            android:id="@+id/errorMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:textColor="@color/error"
+            android:alpha="0"
+            android:text="@string/errorMessage" />
     </LinearLayout>
 
-</RelativeLayout>
+    <include
+        layout="@layout/numeric_keypad_dialog"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="40dp"/>
+
+</LinearLayout>

@@ -1,26 +1,34 @@
 package expo.modules.lockscreen
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TableLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import expo.modules.lockscreen.databinding.ActivityFullscreenBinding
+
 
 class FullscreenActivity : AppCompatActivity() {
   private lateinit var dots: Array<ViewGroup>
   private lateinit var binding: ActivityFullscreenBinding
 
   private val pinBuilder = StringBuilder()
+  private var isKeyboardLocked = false
+  private var isErrorShown = false
 
   private val showRunnable = Runnable { show() }
+  private val hideRunnable = Runnable { hide() }
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +52,22 @@ class FullscreenActivity : AppCompatActivity() {
         }
       }
     }
+
+    setText()
+  }
+
+  private fun setText() {
+    val title = intent.getStringExtra("title")
+    val message = intent.getStringExtra("message")
+
+    if (title == null && message == null) {
+      return
+    }
+    val titleComponent = findViewById<TextView>(R.id.lockTitle)
+    val messageComponent = findViewById<TextView>(R.id.lockMessage)
+
+    titleComponent.text = title
+    messageComponent.text = message
   }
 
   private fun getAllButtons(parent: ViewGroup): List<Button> {
@@ -61,14 +85,7 @@ class FullscreenActivity : AppCompatActivity() {
   }
 
   private fun show() {
-    supportActionBar?.hide()
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      window.insetsController?.hide(WindowInsets.Type.statusBars())
-    } else {
-      window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
-
+    // TODO - hide status bar and navigation bar
     setContentView(R.layout.activity_fullscreen)
 
     val dotHolder = findViewById<LinearLayout>(R.id.dotHolder)
@@ -77,6 +94,11 @@ class FullscreenActivity : AppCompatActivity() {
         dotHolder.addView(it)
       } as ViewGroup
     }
+  }
+
+  private fun hide() {
+    // TODO - show status bar and navigation bar (better: restore previous state)
+    finish()
   }
 
   private fun onPinModified(newPin: String, oldPin: String = "") {
@@ -100,10 +122,22 @@ class FullscreenActivity : AppCompatActivity() {
       animatorSet.playTogether(opacityAnimator, scaleXAnimator, scaleYAnimator)
     }
 
+    animatorSet.addListener(object : AnimatorListenerAdapter() {
+      override fun onAnimationEnd(animation: Animator) {
+        if (newPin.length == DOTS_COUNT) validatePin()
+      }
+    })
+
     animatorSet.start()
   }
 
   private fun handleButtonClick(button: Button) {
+    if (isKeyboardLocked) {
+      return
+    } else if (isErrorShown) {
+      isErrorShown = false
+      animateErrorMessage(false)
+    }
     val prevPin = pinBuilder.toString()
 
     when (button.tag) {
@@ -129,7 +163,57 @@ class FullscreenActivity : AppCompatActivity() {
     onPinModified(pinBuilder.toString(), prevPin)
   }
 
+  private fun validatePin() {
+    isKeyboardLocked = true
+    if (pinBuilder.toString() == CORRECT_PIN) {
+      hideRunnable.run()
+    } else {
+      // Dots shake animation
+      val animatorSet = AnimatorSet()
+      dots.forEach { dot ->
+        val shakeAnimator = ObjectAnimator.ofFloat(dot, "translationX", -10f, 10f, -10f, 10f, -10f, 10f, 0f)
+        animatorSet.playTogether(shakeAnimator)
+      }
+      animatorSet.start()
+
+      // Show error message
+      isErrorShown = true
+      animateErrorMessage(true)
+      vibratePhone()
+
+      // Clear enteredPin after animation ends
+      animatorSet.addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator) {
+          handlePinClear()
+        }
+      })
+    }
+  }
+
+  private fun vibratePhone() {
+    if (Build.VERSION.SDK_INT >= 26) {
+      (getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+      (getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(200)
+    }
+  }
+
+  private fun animateErrorMessage(show: Boolean) {
+    val errorMessage = findViewById<TextView>(R.id.errorMessage)
+
+    val translationY = if (show) 0f else -50f
+    val alpha = if (show) 1f else 0f
+
+    val slideDownAnimator = ObjectAnimator.ofFloat(errorMessage, "translationY", translationY)
+    val opacityAnimator = ObjectAnimator.ofFloat(errorMessage, "alpha", alpha)
+
+    val errorAnimatorSet = AnimatorSet()
+    errorAnimatorSet.playTogether(slideDownAnimator, opacityAnimator)
+    errorAnimatorSet.start()
+  }
+
   private fun handlePinClear() {
+    isKeyboardLocked = false
     val prevPin = pinBuilder.toString()
     pinBuilder.clear()
     onPinModified(pinBuilder.toString(), prevPin)
@@ -137,6 +221,6 @@ class FullscreenActivity : AppCompatActivity() {
 
   companion object {
     const val DOTS_COUNT = 4
-    const val ANIMATION_DURATION = 300L
+    const val CORRECT_PIN = "1234" // TODO: Move to keystore
   }
 }

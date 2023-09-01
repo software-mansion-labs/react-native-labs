@@ -8,9 +8,11 @@ class ExpoLockScreenModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("ExpoLockScreen")
 
-    Function("show") {
+    Function("show") { title: String?, message: String? ->
       val currentActivity = appContext.currentActivity ?: throw Exception("No current activity")
       val intent = Intent(currentActivity, FullscreenActivity::class.java)
+      intent.putExtra("title", title)
+      intent.putExtra("message", message)
       currentActivity.startActivity(intent)
     }
   }
