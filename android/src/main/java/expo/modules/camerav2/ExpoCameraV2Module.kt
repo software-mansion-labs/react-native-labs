@@ -1,12 +1,13 @@
 package expo.modules.camerav2
 
+import android.Manifest
+import expo.modules.interfaces.permissions.Permissions
+import expo.modules.kotlin.Promise
+import expo.modules.kotlin.exception.Exceptions
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 
 class ExpoCameraV2Module : Module() {
-  // workaround hopefully
-  private val camerasRegistry = mapOf<Int, Camera>()
-
   // Each module class must implement the definition function. The definition consists of components
   // that describes the module's functionality and behavior.
   // See https://docs.expo.dev/modules/module-api for more details about available components.

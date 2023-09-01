@@ -2,6 +2,7 @@ import {
   NativeModulesProxy,
   EventEmitter,
   Subscription,
+  createPermissionHook,
 } from "expo-modules-core";
 
 // Import the native module. On web, it will be resolved to ExpoCameraV2.web.ts
@@ -42,9 +43,9 @@ export function useCameraV2(): Camera {
   }, []);
 }
 
-export {
-  CameraV2Preview,
-  CameraV2PreviewProps,
-  ChangeEventPayload,
-  Camera,
-};
+export const useCameraPermissions = createPermissionHook({
+  requestMethod: CameraV2NativeModule.requestCameraPermissionsAsync,
+  getMethod: CameraV2NativeModule.getCameraPermissionsAsync,
+})
+
+export { CameraV2Preview, CameraV2PreviewProps, ChangeEventPayload, Camera };

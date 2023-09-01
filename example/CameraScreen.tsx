@@ -2,11 +2,26 @@ import { FontAwesome } from "@expo/vector-icons";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCameraV2, CameraV2Preview } from "expo-camera-v2";
-import { useCallback } from "react";
+import * as Camera from "expo-camera";
+import { useCallback, useEffect, useState } from "react";
 import { CameraV2PreviewRef } from "expo-camera-v2/ExpoCameraV2NativeView";
+
+function useCameraPermissions() {
+  const [result, setResult] = useState(false);
+  useEffect(() => {
+    (async () => {
+      const result = await Camera.requestCameraPermissionsAsync();
+      setResult(result.granted);
+    })();
+  }, []);
+
+  return result;
+}
 
 export function CameraScreen() {
   const { top } = useSafeAreaInsets();
+
+  const permissionGranted = useCameraPermissions();
 
   const camera = useCameraV2();
 
@@ -20,6 +35,15 @@ export function CameraScreen() {
     },
     [camera]
   );
+
+  if (!permissionGranted) {
+    console.warn("Camera permission not granted");
+    return (
+      <View style={[styles.container, { paddingTop: top }]}>
+        <Text style={{ color: "white" }}>Camera permissions not granted</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>
