@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "react-native-microphone-meter": ["../src/index"],
+      "react-native-microphone-meter/*": ["../src/*"]
+    }
+  }
+}
