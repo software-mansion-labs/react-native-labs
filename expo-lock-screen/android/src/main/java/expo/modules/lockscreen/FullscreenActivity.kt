@@ -56,6 +56,11 @@ class FullscreenActivity : AppCompatActivity() {
     setText()
   }
 
+  override fun onDestroy() {
+    super.onDestroy()
+    hide()
+  }
+
   private fun setText() {
     val title = intent.getStringExtra("title")
     val message = intent.getStringExtra("message")
@@ -85,6 +90,7 @@ class FullscreenActivity : AppCompatActivity() {
   }
 
   private fun show() {
+    isActive = true
     // TODO - hide status bar and navigation bar
     setContentView(R.layout.activity_fullscreen)
 
@@ -97,6 +103,7 @@ class FullscreenActivity : AppCompatActivity() {
   }
 
   private fun hide() {
+    isActive = false
     // TODO - show status bar and navigation bar (better: restore previous state)
     finish()
   }
@@ -220,6 +227,7 @@ class FullscreenActivity : AppCompatActivity() {
   }
 
   companion object {
+    var isActive = false
     const val DOTS_COUNT = 4
     const val CORRECT_PIN = "1234" // TODO: Move to keystore
   }
