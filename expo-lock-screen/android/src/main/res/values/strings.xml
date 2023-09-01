@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title">Unlock the app</string>
+    <string name="message">Enter your PIN number to unlock the app</string>
+    <string name="errorMessage">Wrong PIN</string>
+</resources>
