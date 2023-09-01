@@ -1,6 +1,6 @@
 <resources>
     <!-- other styles -->
-    <style name="NumericButton" parent="android:Widget.Button">
+    <style name="KeypadButton" parent="android:Widget.Button">
         <item name="android:background">@drawable/ripple_effect</item>
         <item name="android:textColor">@color/text</item>
         <item name="android:textSize">24sp</item>

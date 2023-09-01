@@ -1,47 +1,25 @@
 package expo.modules.lockscreen
 
-import androidx.appcompat.app.AppCompatActivity
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowInsets
+import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.TableLayout
+import androidx.appcompat.app.AppCompatActivity
 import expo.modules.lockscreen.databinding.ActivityFullscreenBinding
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 class FullscreenActivity : AppCompatActivity() {
-  private val visibilityHandler = Handler(Looper.myLooper()!!)
-
+  private lateinit var dots: Array<ViewGroup>
   private lateinit var binding: ActivityFullscreenBinding
-  private lateinit var fullscreenContentControls: LinearLayout
-  private var isFullscreen: Boolean = false
 
+  private val pinBuilder = StringBuilder()
 
-//  @SuppressLint("InlinedApi")
-//  private val hideRunnable = Runnable {
-//    // Delayed removal of status and navigation bar
-//    if (Build.VERSION.SDK_INT >= 30) {
-//      fullscreenContent.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-//    } else {
-//      // Note that some of these constants are new as of API 16 (Jelly Bean)
-//      // and API 19 (KitKat). It is safe to use them, as they are inlined
-//      // at compile-time and do nothing on earlier devices.
-//      fullscreenContent.systemUiVisibility =
-//        View.SYSTEM_UI_FLAG_LOW_PROFILE or
-//                View.SYSTEM_UI_FLAG_FULLSCREEN or
-//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-//                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-//                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-//                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//    }
-//  }
   private val showRunnable = Runnable { show() }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -50,36 +28,37 @@ class FullscreenActivity : AppCompatActivity() {
 
     binding = ActivityFullscreenBinding.inflate(layoutInflater)
     showRunnable.run()
+
+    val tableLayout = findViewById<TableLayout>(R.id.table)
+    val buttons = getAllButtons(tableLayout)
+
+    buttons.forEach { button ->
+      button.setOnClickListener {
+        handleButtonClick(button)
+      }
+
+      if (button.tag == "delete") {
+        button.setOnLongClickListener {
+          handlePinClear()
+          true
+        }
+      }
+    }
   }
 
-  override fun onPostCreate(savedInstanceState: Bundle?) {
-    super.onPostCreate(savedInstanceState)
+  private fun getAllButtons(parent: ViewGroup): List<Button> {
+    val buttons = mutableListOf<Button>()
+    for (i in 0 until parent.childCount) {
+      val child = parent.getChildAt(i)
+
+      if (child is Button) {
+        buttons.add(child)
+      } else if (child is ViewGroup) {
+        buttons.addAll(getAllButtons(child))
+      }
+    }
+    return buttons
   }
-
-//  private fun toggle() {
-//    if (isFullscreen) {
-//      hide()
-//    } else {
-//      show()
-//    }
-//  }
-
-//  private fun hide() {
-//    isFullscreen = true
-//
-//    // Show the system bar
-//    if (Build.VERSION.SDK_INT >= 30) {
-//      fullscreenContent.windowInsetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-//    } else {
-//      fullscreenContent.systemUiVisibility =
-//        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-//                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//    }
-//
-//    // Schedule a runnable to remove the status and navigation bar after a delay
-//    hideHandler.removeCallbacks(showRunnable)
-//    hideHandler.postDelayed(hideRunnable, UI_ANIMATION_DELAY.toLong())
-//  }
 
   private fun show() {
     supportActionBar?.hide()
@@ -91,25 +70,73 @@ class FullscreenActivity : AppCompatActivity() {
     }
 
     setContentView(R.layout.activity_fullscreen)
+
+    val dotHolder = findViewById<LinearLayout>(R.id.dotHolder)
+    dots = Array(DOTS_COUNT) {
+      layoutInflater.inflate(R.layout.dot_view, dotHolder, false).also {
+        dotHolder.addView(it)
+      } as ViewGroup
+    }
+  }
+
+  private fun onPinModified(newPin: String, oldPin: String = "") {
+    val animatorSet = AnimatorSet()
+
+    dots.forEachIndexed { index, dot ->
+      val fill = dot.findViewById<View>(R.id.dot_fill)
+
+      val isFilled = index < newPin.length
+      val wasFilled = index < oldPin.length
+
+      if (isFilled == wasFilled) {
+        return@forEachIndexed
+      }
+
+      val value = if (isFilled) 1f else 0f
+      val opacityAnimator = ObjectAnimator.ofFloat(fill, "alpha", value)
+      val scaleXAnimator = ObjectAnimator.ofFloat(fill, "scaleX", value)
+      val scaleYAnimator = ObjectAnimator.ofFloat(fill, "scaleY", value)
+
+      animatorSet.playTogether(opacityAnimator, scaleXAnimator, scaleYAnimator)
+    }
+
+    animatorSet.start()
+  }
+
+  private fun handleButtonClick(button: Button) {
+    val prevPin = pinBuilder.toString()
+
+    when (button.tag) {
+      "delete" -> {
+        // Delete the last character from enteredPin
+        if (pinBuilder.isNotEmpty()) {
+          pinBuilder.delete(pinBuilder.length - 1, pinBuilder.length)
+        }
+      }
+      "bio" -> {
+        // You can handle any operations needed to be done when the bio button is clicked here
+        // TODO: Handle bio button click
+      }
+      else -> {
+        // Concatenate button's text to enteredPin only if the limit has not been reached
+        if (pinBuilder.length < DOTS_COUNT) {
+          pinBuilder.append(button.text)
+        }
+      }
+    }
+
+    // Update the dots
+    onPinModified(pinBuilder.toString(), prevPin)
+  }
+
+  private fun handlePinClear() {
+    val prevPin = pinBuilder.toString()
+    pinBuilder.clear()
+    onPinModified(pinBuilder.toString(), prevPin)
   }
 
   companion object {
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * [AUTO_HIDE_DELAY_MILLIS] milliseconds.
-     */
-    private const val AUTO_HIDE = true
-
-    /**
-     * If [AUTO_HIDE] is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private const val AUTO_HIDE_DELAY_MILLIS = 3000
-
-    /**
-     * Some older devices needs a small delay between UI widget updates
-     * and a change of the status and navigation bar.
-     */
-    private const val UI_ANIMATION_DELAY = 300
+    const val DOTS_COUNT = 4
+    const val ANIMATION_DURATION = 300L
   }
 }
