@@ -1,0 +1,6 @@
+<resources>
+    <color name="background">#ffffff</color>
+    <color name="text">#000000</color>
+    <color name="ripple">#32BDBDBD</color>
+    <color name="error">#FF0000</color>
+</resources>

@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="ThemeOverlay.Expolockscreenexample.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">#000000</item>
+        <item name="textColor">#ffffff</item>
+    </style>
+</resources>
