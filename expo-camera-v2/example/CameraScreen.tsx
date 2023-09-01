@@ -75,7 +75,7 @@ function ShutterButton({ onPress }: { onPress: () => void }) {
   );
 }
 
-const MODE_BUTTONS = [{ title: "PHOTO" }, { title: "VIDEO" }] as const;
+const MODE_BUTTONS = [/*{ title: "PHOTO" }, { title: "VIDEO" }*/] as const;
 
 function ModeSelect() {
   return (
@@ -90,12 +90,12 @@ function ModeSelect() {
 }
 
 const CONTROL_BUTTONS = [
-  { name: "cog" },
-  { name: "bolt" },
-  { name: "clock-o" },
-  { name: "square-o" },
-  { name: "square" },
-  { name: "magic" },
+  // { name: "cog" },
+  // { name: "bolt" },
+  // { name: "clock-o" },
+  // { name: "square-o" },
+  // { name: "square" },
+  // { name: "magic" },
 ] as const;
 
 function ControlButtons() {
