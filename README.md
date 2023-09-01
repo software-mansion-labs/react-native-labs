@@ -10,4 +10,9 @@ Directory with experimental React Native modules and features.
 | [sweet-screens](./sweet-screens) | Using `UINavigationController` on iOS to mimic Native Stack from React Native Screens (PoC) with Expo Modules API | <video src="https://github.com/software-mansion-labs/react-native-labs/assets/39658211/7d87de31-00e3-4719-9e9e-fa6c6601b903" height="480"/> |
 | [link-preview](./link-preview) | Native iOS [LinkPresentation](https://developer.apple.com/documentation/linkpresentation) in React Native | <video src="https://github.com/software-mansion-labs/react-native-labs/assets/104823336/878f810b-da13-41b5-b7fa-e3235c9f1af4" height="480"/> |
 | [expo-live-activities](./expo-live-activities) | Fork of [react-native-widget-extensions](https://github.com/bndkt/react-native-widget-extension) allowing multiple activities in one time in one app and containing more generic update and end TS functions | <video src="https://github.com/software-mansion-labs/react-native-labs/assets/109533125/8cbec87e-1219-4637-b2e7-48c93fd8804f" height="480"/> | |
-| [expo-flashlight](./expo-flashlight)           | Add basic functions that allow users to control flashlight on their devices |  |   
+| [expo-flashlight](./expo-flashlight)           | Add basic functions that allow users to control flashlight on their devices | <video src="https://github.com/software-mansion-labs/react-native-labs/assets/39538890/33366084-2b42-4b8b-8195-4818f3a9c16c" height="480"/> |   
+
+
+
+
+
