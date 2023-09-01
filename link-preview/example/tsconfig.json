@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "link-preview": ["../src/index"],
+      "link-preview/*": ["../src/*"]
+    }
+  }
+}
