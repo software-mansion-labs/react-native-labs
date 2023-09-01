@@ -1,5 +1,4 @@
 
-https://github.com/software-mansion-labs/react-native-labs/assets/65238862/0d934271-6c9e-4528-9f7b-d65bf98b2b48
 # react-native-labs
 
 Directory with experimental React Native modules and features.
@@ -17,7 +16,6 @@ Directory with experimental React Native modules and features.
 | [microphone-meter](./MicrophoneMeter) | Detects the sound with the microphone and controls the torch based on the sound level. (Android + iOS)| <video src="https://github.com/software-mansion-labs/react-native-labs/assets/15989228/1d05de08-901f-4f58-b8b2-f93c07fc9e8a" height="480"/> |
 [react-native-multipeer](./react-native-multipeer) | Multipeer Conectivity API (*only ios) | https://drive.google.com/file/d/1h5NWY6IlUm_4QucM-IFt2ZWx9UkNl0jt/view?usp=sharing | 
 | |
-|[expo-lock-screen](./expo-lock-screen)| Native lock screen for android and ios |
-https://github.com/software-mansion-labs/react-native-labs/assets/65238862/bf89749a-b3e1-4886-9eb1-d76cb518b251|
+|[expo-lock-screen](./expo-lock-screen)| Native lock screen for android and ios | https://github.com/software-mansion-labs/react-native-labs/assets/65238862/bf89749a-b3e1-4886-9eb1-d76cb518b251|
 
 
