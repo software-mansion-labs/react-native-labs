@@ -3,7 +3,7 @@ import { createPermissionHook, PermissionResponse } from "expo-modules-core";
 import { CameraV2NativeModule } from "./ExpoCameraV2NativeModule";
 import { CameraV2Preview, CameraV2PreviewRef } from "./ExpoCameraV2NativeView";
 import { CameraV2PreviewProps, Camera } from "./ExpoCameraV2.types";
-import { useMemo } from "react";
+import { useMemo } from "../../expo-lock-screen/node_modules/@types/react";
 
 export function useCameraV2(): Camera {
   return useMemo(() => {

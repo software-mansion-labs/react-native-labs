@@ -1,4 +1,4 @@
-import React from "react";
+import React from "../../expo-lock-screen/node_modules/@types/react";
 import { Button, StyleSheet, Text, View } from "react-native";
 
 import * as ExpoSuperTorch from "expo-super-torch";

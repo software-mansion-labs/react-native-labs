@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { CameraScreen } from './CameraScreen';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
+import { useEffect } from "../../expo-lock-screen/node_modules/@types/react";
+import { CameraScreen } from "./CameraScreen";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   return (
@@ -11,4 +11,3 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-

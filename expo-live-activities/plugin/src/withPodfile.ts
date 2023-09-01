@@ -1,4 +1,4 @@
-import { mergeContents } from "@expo/config-plugins/build/utils/generateCode";
+import { mergeContents } from "../../../expo-lock-screen/node_modules/@expo/config-plugins/build/utils/generateCode";
 import { ConfigPlugin, withDangerousMod } from "expo/config-plugins";
 import * as fs from "fs";
 import * as path from "path";

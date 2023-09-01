@@ -1,4 +1,4 @@
-import React from "react";
+import React from "../../expo-lock-screen/node_modules/@types/react";
 import { Pressable, StyleSheet, Switch, Text, View } from "react-native";
 
 import * as ExpoFlashlight from "expo-flashlight";

@@ -1,92 +1,118 @@
-import { useCallback, useRef, useState } from "react";
+import {
+  useCallback,
+  useRef,
+  useState,
+} from "../../expo-lock-screen/node_modules/@types/react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { areActivitiesEnabled, startActivity as _startActivity, updateActivity as _updateActivity, endActivity as _endActivity } from "react-native-widget-extension-local";
-
+import {
+  areActivitiesEnabled,
+  startActivity as _startActivity,
+  updateActivity as _updateActivity,
+  endActivity as _endActivity,
+} from "react-native-widget-extension-local";
 
 function useLiveAcitivites() {
   const activitiesMapRef = useRef(new Map<string, string>());
 
-  const startActivity = useCallback(({
-    totalAmount,
-    orderNumber,
-    driverName,
-    minutes,
-    seconds,
-  }: {
-    totalAmount: string;
-    orderNumber: string;
-    driverName: string;
-    minutes: number;
-    seconds: number;
-  }): string | null => {
-    if (!areActivitiesEnabled()) {
-      return null;
-    }
-
-     const activityId = _startActivity(
+  const startActivity = useCallback(
+    ({
       totalAmount,
       orderNumber,
       driverName,
       minutes,
-      seconds
-    );
-    
-    if(!activityId) {
-      return null;
-    }
+      seconds,
+    }: {
+      totalAmount: string;
+      orderNumber: string;
+      driverName: string;
+      minutes: number;
+      seconds: number;
+    }): string | null => {
+      if (!areActivitiesEnabled()) {
+        return null;
+      }
 
-    activitiesMapRef.current.set(orderNumber, activityId);
+      const activityId = _startActivity(
+        totalAmount,
+        orderNumber,
+        driverName,
+        minutes,
+        seconds
+      );
 
-    return activityId;
-  }, []);
+      if (!activityId) {
+        return null;
+      }
 
-  const updateActivity = useCallback(({
-    orderNumber,
-    driverName,
-    minutes,
-    seconds,
-  }: {
-    orderNumber: string;
-    driverName: string;
-    minutes: number;
-    seconds: number;
-  }) => {
-    if (!areActivitiesEnabled() || !activitiesMapRef.current.has(orderNumber)) {
-      return;
-    }
+      activitiesMapRef.current.set(orderNumber, activityId);
 
-    const activityId = activitiesMapRef.current.get(orderNumber);
+      return activityId;
+    },
+    []
+  );
 
-    if(!activityId) return console.warn(`No activity found for order number ${orderNumber}`);
-
-    return _updateActivity(
-      activityId,
+  const updateActivity = useCallback(
+    ({
+      orderNumber,
       driverName,
       minutes,
-      seconds
-    );
-  }, []);
+      seconds,
+    }: {
+      orderNumber: string;
+      driverName: string;
+      minutes: number;
+      seconds: number;
+    }) => {
+      if (
+        !areActivitiesEnabled() ||
+        !activitiesMapRef.current.has(orderNumber)
+      ) {
+        return;
+      }
 
-  const endActivity = useCallback(({ orderNumber, driverName }: { orderNumber: string, driverName: string }) => {
-    if (!areActivitiesEnabled()) {
-      return;
-    }
+      const activityId = activitiesMapRef.current.get(orderNumber);
 
-    const activityId = activitiesMapRef.current.get(orderNumber);
+      if (!activityId)
+        return console.warn(
+          `No activity found for order number ${orderNumber}`
+        );
 
-    if(!activityId) return console.warn(`No activity found for order number ${orderNumber}`);
+      return _updateActivity(activityId, driverName, minutes, seconds);
+    },
+    []
+  );
 
-    activitiesMapRef.current.delete(orderNumber);
-    return _endActivity(activityId, driverName);
-  }, []);
+  const endActivity = useCallback(
+    ({
+      orderNumber,
+      driverName,
+    }: {
+      orderNumber: string;
+      driverName: string;
+    }) => {
+      if (!areActivitiesEnabled()) {
+        return;
+      }
+
+      const activityId = activitiesMapRef.current.get(orderNumber);
+
+      if (!activityId)
+        return console.warn(
+          `No activity found for order number ${orderNumber}`
+        );
+
+      activitiesMapRef.current.delete(orderNumber);
+      return _endActivity(activityId, driverName);
+    },
+    []
+  );
 
   return {
     startActivity,
     updateActivity,
     endActivity,
-  }
+  };
 }
-
 
 export default function TabTwoScreen() {
   const [driverName, setDriverName] = useState<string>("");
@@ -112,8 +138,8 @@ export default function TabTwoScreen() {
               onChangeText={setDriverName}
             />
           </View>
-          <View style={{ marginBottom: 15}}>
-          <Text>Order number:</Text>
+          <View style={{ marginBottom: 15 }}>
+            <Text>Order number:</Text>
             <TextInput
               placeholder="Order number"
               style={{
@@ -136,8 +162,7 @@ export default function TabTwoScreen() {
                 driverName,
                 minutes: 2,
                 seconds: 30,
-              }
-              );
+              });
             }}
           />
           <Button

@@ -1,6 +1,6 @@
-import * as React from 'react';
+import * as React from "../../expo-lock-screen/node_modules/@types/react";
 
-import { ExpoSuperTorchViewProps } from './ExpoSuperTorch.types';
+import { ExpoSuperTorchViewProps } from "./ExpoSuperTorch.types";
 
 export default function ExpoSuperTorchView(props: ExpoSuperTorchViewProps) {
   return (

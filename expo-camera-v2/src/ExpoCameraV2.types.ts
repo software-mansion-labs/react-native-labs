@@ -1,4 +1,4 @@
-import { Ref } from "react";
+import { Ref } from "../../expo-lock-screen/node_modules/@types/react";
 import { ViewProps } from "react-native";
 import { CameraV2PreviewRef } from "./ExpoCameraV2NativeView";
 

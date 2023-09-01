@@ -7,7 +7,11 @@ import {
   CameraV2PreviewRef,
   requestCameraPermissionsAsync,
 } from "expo-camera-v2";
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "../../expo-lock-screen/node_modules/@types/react";
 
 function useCameraPermissions() {
   const [result, setResult] = useState(false);
@@ -75,7 +79,9 @@ function ShutterButton({ onPress }: { onPress: () => void }) {
   );
 }
 
-const MODE_BUTTONS = [/*{ title: "PHOTO" }, { title: "VIDEO" }*/] as const;
+const MODE_BUTTONS = [
+  /*{ title: "PHOTO" }, { title: "VIDEO" }*/
+] as const;
 
 function ModeSelect() {
   return (

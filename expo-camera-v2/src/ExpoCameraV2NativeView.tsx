@@ -1,5 +1,5 @@
 import { requireNativeViewManager } from "expo-modules-core";
-import React, { Ref } from "react";
+import React, { Ref } from "../../expo-lock-screen/node_modules/@types/react";
 
 import { Camera, CameraV2PreviewProps } from "./ExpoCameraV2.types";
 
