@@ -2,7 +2,7 @@ import { Button, StyleSheet, View } from "react-native";
 
 import * as ExpoLockScreen from "expo-lock-screen";
 
-ExpoLockScreen.initialize();
+// ExpoLockScreen.initialize();
 
 export default function App() {
   return (
