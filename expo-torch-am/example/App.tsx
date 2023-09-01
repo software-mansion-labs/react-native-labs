@@ -86,6 +86,6 @@ const styles = StyleSheet.create({
   },
   rect: { paddingVertical: 10, paddingHorizontal: 20, borderWidth: 1, alignItems:'center', margin: 10 },
   torchLevelRect: {
-    paddingVertical: 5, paddingHorizontal: 5, borderWidth: 1, alignItems:'center', margin: 5
+    paddingVertical: 10, paddingHorizontal: 10, borderWidth: 1, alignItems:'center', margin: 5
   }
 });
