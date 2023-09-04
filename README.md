@@ -17,5 +17,6 @@ Directory with experimental React Native modules and features.
 | [react-native-multipeer](./react-native-multipeer) | Multipeer Conectivity API (*only ios) | https://drive.google.com/file/d/1h5NWY6IlUm_4QucM-IFt2ZWx9UkNl0jt/view?usp=sharing | 
 | [expo-lock-screen](./expo-lock-screen) | Native lock screen for android and ios | https://github.com/software-mansion-labs/react-native-labs/assets/65238862/bf89749a-b3e1-4886-9eb1-d76cb518b251 |
 | [expo-torch-am](./expo-torch-am) | Torch API for both platforms with possibility to change torch level | iOS https://drive.google.com/file/d/18PgPA0EhBA7_zd2TaqzG7rwDP9gzPcag/view?usp=sharing Android https://drive.google.com/file/d/1857ii_J-6u5mxy_azUUk7Q4mo5fJJLF_/view?usp=sharing |
+| [expo-video (android)]() | Wraps [`androidx.media3.exoplayer`](https://developer.android.com/reference/androidx/media3/exoplayer/package-summary) with [`Expo Modules API`](https://docs.expo.dev/modules/module-api) | https://github.com/software-mansion-labs/react-native-labs/assets/91068263/5feb4d4a-80cc-4728-a396-72110b58fa09 |
 
 
