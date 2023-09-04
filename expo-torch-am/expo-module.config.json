@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["ExpoTorchModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.torch.ExpoTorchModule"]
+  }
+}
