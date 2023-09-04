@@ -1,0 +1,22 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_margin="5dp">
+
+    <View
+        android:id="@+id/dot_border"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_dot_border" />
+
+    <View
+        android:id="@+id/dot_fill"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_dot_filled"
+        android:alpha="0"
+        android:scaleX="0"
+        android:scaleY="0" />
+</FrameLayout>
